@@ -1,37 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#101818"
+    android:background="#000000"
     android:padding="24dp"
     tools:context=".HomeActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#101818"
+        android:background="#00000000"
         android:padding="20dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <!-- TEXTO PARA SABER EL ESTADO DE CARGA DEL API -->
             <TextView
-                android:id="@+id/tvResultado"
+                android:id="@+id/tvEstado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="10dp"
+                android:text="Cargando"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <!-- ROCK MEXICANO -->
+            <TextView
+                android:id="@+id/tvGeneroIndie"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:text="Cargando pruba de api"
-                android:textSize="20dp"/>
-            <ImageView
-                android:id="@+id/imgAlbum"
-                android:layout_width="240dp"
-                android:layout_height="240dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:scaleType="centerCrop"/>
+                android:layout_marginHorizontal="15dp"
+                android:text="Rock Mexicano"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:clipToPadding="false"
+                android:fillViewport="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/contenedorIndie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
+
+            <!-- CORRIDOS -->
+            <TextView
+                android:id="@+id/tvGeneroCorridos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:text="Corridos"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:clipToPadding="false"
+                android:fillViewport="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/contenedorCorridos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
+
+            <!-- POP -->
+            <TextView
+                android:id="@+id/tvGeneroDannyOcean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:text="POP"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:clipToPadding="false"
+                android:fillViewport="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/contenedorDannyOcean"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
 
         </LinearLayout>
     </ScrollView>
