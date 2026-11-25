@@ -17,6 +17,7 @@ class AlbumDetailActivity : AppCompatActivity() {
     private lateinit var tvArtistaAlbum: TextView
     private lateinit var tvAlbumDetalle: TextView
     private lateinit var btnFavorito: ImageButton
+    private lateinit var dbHelper: DataBaseHelper
 
     private var albumFavorito = false
 
@@ -25,49 +26,78 @@ class AlbumDetailActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_album_detail)
 
+        dbHelper = DataBaseHelper(this)
+
         imgPortadaDetalle = findViewById(R.id.imgPortadaDetalle)
         tvNombreAlbumDetalle = findViewById(R.id.tvNombreAlbumDetalle)
         tvArtistaAlbum = findViewById(R.id.tvArtistaAlbumDetalle)
         tvAlbumDetalle = findViewById(R.id.tvAlbumDetalle)
         btnFavorito = findViewById(R.id.btnFavorito)
 
+        mostrarInformacionAlbum()
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        mostrarInformacionAlbum()
     }
 
+    // metodo para obtener toda la informacion
     private fun mostrarInformacionAlbum() {
-        val idAlbum = intent.getLongExtra("ID_ALBUM", 1)
-        val nombreAlbum = intent.getStringExtra("NOMBRE_ALBUM")
-        val artista = intent.getStringExtra("ARTISTA_ALBUM")
-        val genero = intent.getStringExtra("GENERO_ALBUM")
-        // Funciona si se manda como Int o como String
-        val numeroCanciones = intent.extras?.get("CANCIONES_ALBUM")
-        val fecha = intent.getStringExtra("FECHA_ALBUM")
-        val imagen = intent.getStringExtra("IMAGEN_ALBUM")
+        val idAlbum = intent.getLongExtra("ID_ALBUM", -1)
+        val nombreAlbum = intent.getStringExtra("NOMBRE_ALBUM") ?: "Album Desconocido"
+        val artista = intent.getStringExtra("ARTISTA_ALBUM") ?: "Artista Desconocido"
+        val genero = intent.getStringExtra("GENERO_ALBUM") ?: "Genero Desconocido"
+        val numeroCanciones = intent.getIntExtra("CANCIONES_ALBUM", 0)
+        val fecha = intent.getStringExtra("FECHA_ALBUM") ?: "Sin Fecha"
+        val imagen = intent.getStringExtra("IMAGEN_ALBUM") ?: " "
 
         tvNombreAlbumDetalle.text = nombreAlbum
         tvArtistaAlbum.text = artista
-        tvAlbumDetalle.text = genero + "-" + "$numeroCanciones canciones"
+        tvAlbumDetalle.text = genero + " - " + "$numeroCanciones canciones"
 
         Glide.with(this)
             .load(imagen)
             .centerCrop()
             .into(imgPortadaDetalle)
 
-        btnFavorito.setOnClickListener {
-            albumFavorito = !albumFavorito
+        // validacion para verificar si el album es favorito o no
+        if (idAlbum != -1L) {
+            albumFavorito = dbHelper.existeAlbumFavorito(idAlbum)
+        }
 
+        // mostrar el icono correcto al abrir la pantalla
+        if (albumFavorito) {
+            btnFavorito.setImageResource(R.drawable.favorito)
+        } else {
+            btnFavorito.setImageResource(R.drawable.no_favorito)
+        }
+
+        btnFavorito.setOnClickListener {
             if (albumFavorito) {
-                btnFavorito.setImageResource(R.drawable.favorito)
-                Toast.makeText(this, "Álbum $nombreAlbum agregado a favoritos", Toast.LENGTH_SHORT).show()
+                val eliminado = dbHelper.eliminarAlbumFavorito(idAlbum)
+                if (eliminado) {
+                    albumFavorito = !albumFavorito
+                    btnFavorito.setImageResource(R.drawable.no_favorito)
+                    Toast.makeText(this, "Álbum $nombreAlbum eliminado de favoritos", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                btnFavorito.setImageResource(R.drawable.no_favorito)
-                Toast.makeText(this, "Álbum $nombreAlbum eliminado de favoritos", Toast.LENGTH_SHORT).show()
+                val guardado = dbHelper.guardarAlbumFavorito(
+                    albumId = idAlbum,
+                    nombreAlbum = nombreAlbum,
+                    artista = artista,
+                    genero = genero,
+                    canciones = numeroCanciones,
+                    fecha = fecha,
+                    imagen = imagen
+                )
+                // validar que el registro sea exitoso
+                if (guardado) {
+                    albumFavorito = !albumFavorito
+                    btnFavorito.setImageResource(R.drawable.favorito)
+                    Toast.makeText(this, "Álbum $nombreAlbum agregado a favoritos", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

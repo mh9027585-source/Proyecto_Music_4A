@@ -163,4 +163,18 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onStart() {
+        super.onStart()
+
+
+        val usuarioctual = auth.
+        currentUser
+        if (usuarioctual != null) {
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+
 }

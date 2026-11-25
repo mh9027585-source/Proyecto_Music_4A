@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.proyecto_grupal_music.model.Album
 import com.example.proyecto_grupal_music.model.ITunesResponse
 import com.example.proyecto_grupal_music.network.RetrofitClient
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,6 +22,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var contenedorIndie: LinearLayout
     private lateinit var contenedorCorridos: LinearLayout
     private lateinit var contenedorDannyOcean: LinearLayout
+    private lateinit var : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +33,7 @@ class HomeActivity : AppCompatActivity() {
         contenedorIndie = findViewById(R.id.contenedorIndie)
         contenedorCorridos = findViewById(R.id.contenedorCorridos)
         contenedorDannyOcean = findViewById(R.id.contenedorDannyOcean)
+        bottomNavigation = findViewById(R.id.bottomNavigation)
 
         // Se carga cada género en su propio contenedor
         obtenerAlbum("rock mexicano", contenedorIndie)
@@ -117,6 +120,24 @@ class HomeActivity : AppCompatActivity() {
             // Mostrar la informacion
             contenedor.addView(vistaAlbum)
 
+
+        }
+    }
+
+    //metodo pra el funcionamiento del menu
+    private fun menuNavegacion(){
+        //mostrar el elemento seleccionado
+        bottomNavigation.selectedItemId = R.id.nav_inicio
+        //funcion de las opciones
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when(item.itemId){
+                R.id.nav_inicio ->{
+                    val intent = Intent(this, FavoritesActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
         }
     }
 }
